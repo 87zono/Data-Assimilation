@@ -24,7 +24,7 @@ obs_sub = obs_full[:test_steps]
 obs_counts = [20, 25, 30, 35, 40]
 
 # ★ Serial_EnSRF をリストから除外しました
-methods_list = ["EKF", "LETKF"]
+methods_list = ["EKF", "LETKF", "PO_EnKF"]
 results_uniform = {m: [] for m in methods_list}
 results_biased = {m: [] for m in methods_list}
 
