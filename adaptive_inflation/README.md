@@ -112,16 +112,16 @@ adaptive_inflation/
 
 ```bash
 # ヒートマップ（最適固定値の確認）
-python slide2_settings.py
+python3 slide2_settings.py
 
 # 固定 vs 動的 比較（m=20）
-python slide3_compare_fixed.py
+python3 slide3_compare_fixed.py
 
 # 固定 vs 動的 比較（m=10）
-python slide3_m10.py
+python3 slide3_m10.py
 
 # アンサンブル数 m=3,8,20 の比較
-python slide4_ensemble.py
+python3 slide4_ensemble.py
 ```
 
 ### 依存パッケージ

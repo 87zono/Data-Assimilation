@@ -16,12 +16,14 @@ R        = np.eye(N)
 
 # m別の最適パラメータ（ヒートマップで確認済み）
 # delta_init: 動的inflationの初期Δ（固定最適値付近から始める）
+# m=2 の σ・fixed_inf は slide_m2_heatmap.py を実行して確認してから更新する
 OPTIMAL = {
+    2:  {"sigma": 1.0,  "fixed_inf": 0.80, "delta_init": 1.80},  # m=2: RMSE=0.4876 (ヒートマップ確認済み)
     3:  {"sigma": 2.0,  "fixed_inf": 0.30, "delta_init": 1.30},  # m=3: RMSE=0.344 (ヒートマップ確認済み)
     8:  {"sigma": 6.0,  "fixed_inf": 0.10, "delta_init": 1.10},  # m=8: RMSE=0.193 (ヒートマップ確認済み)
     20: {"sigma": 10.0, "fixed_inf": 0.02, "delta_init": 1.02},  # m=20: RMSE=0.160 (ヒートマップ確認済み)
 }
-MEMBERS = [3, 8, 20]
+MEMBERS = [2, 3, 8, 20]
 
 print("データ準備中...")
 truth, obs, spinup_states = createdata(N, F, dt)
@@ -57,7 +59,7 @@ time_days = np.arange(1, T + 1) / 4.0
 COLOR_FIXED    = "blue"
 COLOR_ADAPTIVE = "green"
 
-fig, axes = plt.subplots(2, 3, figsize=(20, 6), sharex=True)
+fig, axes = plt.subplots(2, len(MEMBERS), figsize=(7 * len(MEMBERS), 6), sharex=True)
 fig.suptitle(
     f"LETKF: Fixed (m別最適値) vs Adaptive (Miyoshi 2011) — v_b={v_b:.4f}",
     fontsize=13
