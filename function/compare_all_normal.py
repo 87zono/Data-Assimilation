@@ -86,6 +86,10 @@ def run_3DVar(
     var_xa = initial_background.copy()
 
     rmse_a_save = []
+    spread_a_save = []
+
+    A = np.linalg.inv( B_inv + H.T @ R_inv @ H)
+    analysis_spread = np.sqrt( np.trace(A) / N)
 
     for t in range(1, len(truth)):
 
@@ -107,9 +111,11 @@ def run_3DVar(
         )
 
         rmse_a_save.append(rmse_a)
+        spread_a_save.append(analysis_spread  )
 
     return {
-        "rmse_a": np.asarray(rmse_a_save)
+        "rmse_a": np.asarray(rmse_a_save),
+        "spread_a": np.asarray(spread_a_save)
     }
 
 def run_PO_EnKF(
@@ -472,7 +478,7 @@ print(
 print(
     f"{'3D-Var':<15}"
     f"{np.mean(var_result['rmse_a'][burn_in:]):>12.4f}"
-    f"{'-':>15}"
+    f"{np.mean(var_result['spread_a'][burn_in:]):>15.4f}"
 )
 
 print(
@@ -492,3 +498,108 @@ print(
     f"{np.mean(letkf_result['rmse_a'][burn_in:]):>12.4f}"
     f"{np.mean(letkf_result['spread_a'][burn_in:]):>15.4f}"
 )
+
+plt.figure(figsize=(12, 6))
+
+plt.plot(
+    time_axis,
+    ekf_result["spread_a"],
+    label="EKF"
+)
+plt.plot(
+    time_axis,
+    po_result["spread_a"],
+    label="3DVAR"
+)
+plt.plot(
+    time_axis,
+    po_result["spread_a"],
+    label="PO-EnKF"
+)
+
+plt.plot(
+    time_axis,
+    ensrf_result["spread_a"],
+    label="Serial EnSRF"
+)
+
+plt.plot(
+    time_axis,
+    letkf_result["spread_a"],
+    label="LETKF"
+)
+
+plt.xlabel("Assimilation step")
+plt.ylabel("Analysis spread")
+
+plt.title(
+    "Analysis spread comparison\n"
+    f"m={m}, inflation={inflation}, "
+    f"localization radius={localization_radius}"
+)
+
+plt.grid()
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+methods_with_spread = [
+    "EKF",
+    "3D-Var",
+    "PO-EnKF",
+    "Serial EnSRF",
+    "LETKF"
+]
+
+mean_rmse = [
+    np.mean(ekf_result["rmse_a"][burn_in:]),
+    np.mean(var_result["rmse_a"][burn_in:]),
+    np.mean(po_result["rmse_a"][burn_in:]),
+    np.mean(ensrf_result["rmse_a"][burn_in:]),
+    np.mean(letkf_result["rmse_a"][burn_in:])
+]
+
+mean_spread = [
+    np.mean(ekf_result["spread_a"][burn_in:]),
+    np.mean(var_result["spread_a"][burn_in:]),
+    np.mean(po_result["spread_a"][burn_in:]),
+    np.mean(ensrf_result["spread_a"][burn_in:]),
+    np.mean(letkf_result["spread_a"][burn_in:])
+]
+
+x = np.arange(len(methods_with_spread))
+width = 0.35
+
+plt.figure(figsize=(10, 6))
+
+plt.bar(
+    x - width / 2,
+    mean_rmse,
+    width,
+    label="Mean RMSE"
+)
+
+plt.bar(
+    x + width / 2,
+    mean_spread,
+    width,
+    label="Mean Spread"
+)
+
+plt.xticks(
+    x,
+    methods_with_spread
+)
+
+plt.ylabel("Value")
+
+plt.title(
+    "Mean RMSE and Mean Spread\n"
+    f"m={m}, inflation={inflation}, "
+    f"localization radius={localization_radius}"
+)
+
+plt.grid(axis="y")
+plt.legend()
+plt.tight_layout()
+plt.show()
