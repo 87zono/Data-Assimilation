@@ -233,7 +233,7 @@ dt = 0.05
 
 m = 20
 inflation = 0.04
-localization_radius = 3.0
+localization_radius = 4.0
 
 B_value = 0.25
 B_inv = (1.0 / B_value) * np.eye(N)
