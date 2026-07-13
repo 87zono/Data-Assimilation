@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from function.create_data import createdata
 from function.run import run_EKF, run_Serial_EnSRF
-from function.Serial_EnKF_function import create_localization_matrix
+from function.create_ensemble_data import create_localization_matrix
 
 # --- 設定パラメータ ---
 N = 40

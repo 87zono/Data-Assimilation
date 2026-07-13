@@ -1,9 +1,10 @@
 # function/run_bias.py
 import numpy as np
 from function.EKF_function import EKF_cycle
-from function.Serial_EnKF_function import Serial_EnSRF_cycle, create_localization_matrix
+from function.Serial_EnKF_function import Serial_EnSRF_cycle
 from function.LETKF_function import LETKF_cycle
 from function.PO_EnKF_function import PO_EnKF_cycle
+from function.create_ensemble_data import create_localization_matrix
 
 def run_bias_experiment_all_methods(truth, obs_full, dt, F, m, inflation, sigma, bias_indices):
     """

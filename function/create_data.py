@@ -24,3 +24,24 @@ def createdata(N, F, dt):
     obs = truth + noise
 
     return truth, obs, all_data[:1461]
+
+def calculate_rmse(estimate, truth):
+    return np.sqrt(np.mean((estimate - truth) ** 2))
+
+
+
+def calculate_global_spread(ensemble):
+    """
+    アンサンブルから全体Spreadを計算する。
+    Spread = sqrt(trace(P) / N)
+    """
+    m, N = ensemble.shape
+    ensemble_mean = np.mean(
+        ensemble,
+        axis=0
+    )
+    perturbations = ( ensemble - ensemble_mean )
+    covariance = ( perturbations.T @ perturbations ) / (m - 1)
+    spread = np.sqrt(np.trace(covariance) / N )
+
+    return spread

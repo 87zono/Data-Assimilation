@@ -71,5 +71,16 @@ def PO_EnKF_cycle(po_ensemble_a, y_obs, dt, F, H, R, inflation, localization_mat
         po_ensemble_a_new[i] = po_ensemble[i] + K @ innovation
 
     xa_mean = np.mean(po_ensemble_a_new, axis=0)
-    
-    return po_ensemble_a_new, xa_mean
+    Xa = po_ensemble_a_new - xa_mean
+    Pa_approx = (Xa.T @ Xa) / (m - 1)
+    spread_by_state = np.std(po_ensemble_a_new,axis=0, ddof=1 )
+
+    spread_a = np.sqrt( np.mean(spread_by_state**2) )
+
+    return (
+        po_ensemble_a_new,
+        xa_mean,
+        Pa_approx,
+        spread_a,
+        spread_by_state
+    )

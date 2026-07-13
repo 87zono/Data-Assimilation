@@ -1,6 +1,7 @@
 import numpy as np
 from function.EKF_function import EKF_cycle  # EKF_cycleが別ファイルにある場合はインポート
-from function.Serial_EnKF_function import Serial_EnSRF_cycle, make_initial_ensemble_from_spinup
+from function.Serial_EnKF_function import Serial_EnSRF_cycle
+from create_ensemble_data import make_initial_ensemble_from_spinup
 
 def run_EKF(truth, obs, dt, F, H, R, inflation):
     """
