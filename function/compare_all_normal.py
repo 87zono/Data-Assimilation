@@ -508,7 +508,7 @@ plt.plot(
 )
 plt.plot(
     time_axis,
-    po_result["spread_a"],
+    var_result["spread_a"],
     label="3DVAR"
 )
 plt.plot(
